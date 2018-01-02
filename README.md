@@ -22,7 +22,7 @@ If you get an dialog like this:
 
 <img src="https://github.com/funky-monkey/microcaps/raw/master/permissions.png" width="400" align="middle">
 
-then go to your Mac's Settings > Security and Privacy and press the "Ppen anyway" button. You can now enjoy the app.
+then go to your Mac's `Settings > Security and Privacy` and press the `Open anyway` button. You can now enjoy the app.
 
 Hope this helps anyone :) 
 
