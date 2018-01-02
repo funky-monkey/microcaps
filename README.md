@@ -14,6 +14,16 @@ After reading [this article](https://medium.com/@daytradernik/picking-out-microc
 * From these remaining coins, cross out all the coins that have a far greater total supply than their circulating supply (this is usually indicative of a large premine, and fuck that noise — there’s plenty of coins to pick up without this added liability). 
 * The ones you’re left with (there’s usually quite a few) are the ones you need to do further research on.
 
+### How do I run this?
+
+In the Releases folder there is a versioned .zip file. Unpack this and drag/copy the the .app file to your `/Applications` folder on your Mac. 
+
+If you get an dialog like this:
+
+<img src="https://github.com/funky-monkey/microcaps/raw/master/permissions.png" width="150" height="150" align="middle">
+
+then go to your Mac's Settings > Security and Privacy and press the "Ppen anyway" button. You can now enjoy the app.
+
 Hope this helps anyone :) 
 
 Any feature requests are welcome!
