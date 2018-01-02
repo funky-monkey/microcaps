@@ -16,11 +16,11 @@ After reading [this article](https://medium.com/@daytradernik/picking-out-microc
 
 ### How do I run this?
 
-In the Releases folder there is a versioned .zip file. Unpack this and drag/copy the the .app file to your `/Applications` folder on your Mac. 
+You can find the latest version under [the Releases tab](https://github.com/funky-monkey/microcaps/releases). Here you'll find a versioned .zip file. Unpack this and drag/copy the the .app file to your `/Applications` folder on your Mac. 
 
 If you get an dialog like this:
 
-<img src="https://github.com/funky-monkey/microcaps/raw/master/permissions.png" width="150" height="150" align="middle">
+<img src="https://github.com/funky-monkey/microcaps/raw/master/permissions.png" width="400" align="middle">
 
 then go to your Mac's Settings > Security and Privacy and press the "Ppen anyway" button. You can now enjoy the app.
 
