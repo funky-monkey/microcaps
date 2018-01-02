@@ -52,8 +52,6 @@ class MarketcapDatasource {
             return (coin.marketCapEur.double ?? 0.0) <= 250_000.0 || (coin.marketCapUsd.double ?? 0.0) <= 250_000.0
         })
         
-        print(smallMarketCap.count)
-        
         self.data = smallMarketCap
     }
     
@@ -64,8 +62,6 @@ class MarketcapDatasource {
             return (coin.maxSupply.double ?? 0.0) <= 50_000_000
         })
         
-        print(mediumCoinSupply.count)
-        
         self.data = mediumCoinSupply
     }
     
@@ -73,14 +69,6 @@ class MarketcapDatasource {
         print("Now calculating microcaps...")
         
         let twentyFourHourVolume = self.data.filter({ (coin: Coin) in
-//            let volume = (coin.availableSupply.double ?? 0.0)
-//            let marketCap = (coin.totalSupply.double ?? 0.0)
-//
-//            //print(Double(volume/marketCap).description)
-//            if (volume/marketCap) > 0.02 {
-//                return true
-//            }
-//            return false
             
             // [x] market cap to volume ratio < 2% (if X has a market cap of $100k, it's 24H volume should be $2000 or more)
             let marketCap = (coin.marketCapUsd.double ?? 0.0)
@@ -88,14 +76,11 @@ class MarketcapDatasource {
             let volume24hour = (coin.change24hVolumeUsd.double ?? 0.0)
             
             if (volume24hour >= marketcapPercentage) {
-                print(marketCap, marketcapPercentage, volume24hour)
                 return true
             }
             return false
         })
         
-        print(twentyFourHourVolume.count)
-
         self.data = twentyFourHourVolume
     }
     
@@ -112,8 +97,6 @@ class MarketcapDatasource {
             }
             return zeroCoinUsd != 0.0 || zeroCoinEur != 0.0 || zeroAvailable != 0.0 || zeroTotalSupply != 0.0
         })
-        
-        print(zeroMarketCap.count)
         
         self.data = zeroMarketCap
     }

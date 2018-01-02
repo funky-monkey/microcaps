@@ -25,7 +25,6 @@ extension Endpoint: Path {
         case .getBase:
             return "/"
         case .ticker:
-            
             return "ticker/?convert=EUR&limit=0"
         }
     }

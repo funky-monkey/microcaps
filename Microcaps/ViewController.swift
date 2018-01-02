@@ -88,7 +88,7 @@ extension ViewController: NSTableViewDelegate {
     }
     
     func tableViewSelectionDidChange(_ notification: Notification) {
-        
+        // Not implemented yet
     }
     
     @objc func tableViewDoubleClick(_ sender:AnyObject) {
@@ -101,8 +101,5 @@ extension ViewController: NSTableViewDelegate {
         let id = item.id.string
         let url = URL(string: "https://coinmarketcap.com/currencies/" + id)!
         NSWorkspace.shared.open(url)
-        
     }
-    
 }
-
