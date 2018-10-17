@@ -30,8 +30,6 @@ struct CoinMarketCapRequest: API {
     }
 
 	var headers: [String : String]? {
-//		return ["application/json; charset=utf-8": "Content-Type",
-//				"X-CMC_PRO_API_KEY" : "fad04d51-3d42-4a32-8c5f-9f0f5eab1254"]
 		return nil
 	}
 
