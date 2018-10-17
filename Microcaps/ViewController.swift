@@ -9,17 +9,23 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    
-    let datasource = MarketcapDatasource()
+
+	let datasource = MarketcapDatasource()
     
     @IBOutlet weak var tableView: NSTableView!
 	@IBOutlet weak var refreshButton: NSButton!
+
+	var appearanceChangeObservation: NSKeyValueObservation?
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
 
 		refreshButton.focusRingType = .none
+
+		self.appearanceChangeObservation = self.view.observe(\.effectiveAppearance) { [weak self] _, _  in
+			self?.updateAppearanceRelatedChanges()
+		}
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -27,11 +33,23 @@ class ViewController: NSViewController {
         
         reload()
     }
+
+	private func updateAppearanceRelatedChanges() {
+
+		switch view.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) {
+		case .aqua?:
+			self.view.layer?.backgroundColor = NSColor.white.cgColor
+		case .darkAqua?:
+			self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
+		default:
+			self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
+		}
+	}
     
     override func viewDidAppear() {
         if let window = self.view.window {
             self.view.wantsLayer = true
-            self.view.layer?.backgroundColor = NSColor.white.cgColor
+            self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
             
             window.titlebarAppearsTransparent = true
             window.titleVisibility = .hidden
