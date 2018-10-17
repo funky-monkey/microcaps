@@ -13,11 +13,13 @@ class ViewController: NSViewController {
     let datasource = MarketcapDatasource()
     
     @IBOutlet weak var tableView: NSTableView!
-    
-    
+	@IBOutlet weak var refreshButton: NSButton!
+
     override func viewDidLoad() {
         
         super.viewDidLoad()
+
+		refreshButton.focusRingType = .none
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -27,7 +29,7 @@ class ViewController: NSViewController {
     }
     
     override func viewDidAppear() {
-        if let window = self.view.window {            
+        if let window = self.view.window {
             self.view.wantsLayer = true
             self.view.layer?.backgroundColor = NSColor.white.cgColor
             
@@ -37,7 +39,8 @@ class ViewController: NSViewController {
         }
     }
     
-    @IBAction func reloadData(_ sender: Any) {
+    @IBAction func reloadData(_ sender: NSButton) {
+
         self.reload()
     }
     
