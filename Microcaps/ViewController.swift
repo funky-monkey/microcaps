@@ -11,10 +11,12 @@ import Cocoa
 class ViewController: NSViewController {
     
     let datasource = MarketcapDatasource()
-
+    
     @IBOutlet weak var tableView: NSTableView!
     
+    
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         
         self.tableView.dataSource = self
@@ -22,6 +24,17 @@ class ViewController: NSViewController {
         self.tableView.doubleAction = #selector(self.tableViewDoubleClick(_:))
         
         reload()
+    }
+    
+    override func viewDidAppear() {
+        if let window = self.view.window {            
+            self.view.wantsLayer = true
+            self.view.layer?.backgroundColor = NSColor.white.cgColor
+            
+            window.titlebarAppearsTransparent = true
+            window.titleVisibility = .hidden
+            window.styleMask.insert(.fullSizeContentView)
+        }
     }
     
     @IBAction func reloadData(_ sender: Any) {

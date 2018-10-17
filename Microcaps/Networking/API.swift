@@ -28,6 +28,7 @@ public protocol API {
     var host: URL? { get }
     var endPoint: Endpoint { get }
     var method: HTTPMethod { get }
+	var headers: [String: String]? { get }
 }
 
 extension API {
@@ -37,9 +38,17 @@ extension API {
         guard let url: URL = self.url(self.endPoint) else {
             throw APIError.noEndpoint
         }
+
+		print(url.absoluteString)
         
         var request: URLRequest = URLRequest(url: url as URL)
         request.httpMethod = method.rawValue
+
+		if let headers = self.headers {
+			for (value, field) in headers {
+				request.setValue(value, forHTTPHeaderField: field)
+			}
+		}
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
             
