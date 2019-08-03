@@ -29,46 +29,88 @@ struct CoinValue: Codable, CustomStringConvertible {
     }
 }
 
+struct CoinMeta: Codable {
+    let status: Status
+    let data: [Coin]
+}
+
+struct Status: Codable {
+	let timestamp: String
+	let errorCode: Int
+	let errorMessage: String?
+	let elapsed: Int
+	let creditCount: Int
+    
+    enum CodingKeys : String, CodingKey {
+        case timestamp = "timestamp"
+        case errorCode = "error_code"
+        case errorMessage = "error_message"
+        case elapsed = "elapsed"
+        case creditCount = "credit_count"
+        
+    }
+}
+
 struct Coin: Codable {
     
-    let id: CoinValue
-    let name: CoinValue
-    let symbol: CoinValue
-    let rank: CoinValue
-    let priceEur: CoinValue
-    let priceUsd: CoinValue
-    let priceBtc: CoinValue
-    let marketCapUsd: CoinValue
-    let marketCapEur: CoinValue
-    let availableSupply: CoinValue
-    let totalSupply: CoinValue
-    let maxSupply: CoinValue
+    let id: Int
+    let name: String
+    let symbol: String
+    let slug: String
+    let numMarketPairs: Int
+    let dateAdded: String
+    let tags: [String?]
+    let maxSupply: Double?
+    let circulatingSupply: Double?
+    let totalSupply: Double?
     
-    let change24hVolumeUsd: CoinValue
-    let change24hVolumeEur: CoinValue
-    let percentChange1h: CoinValue
-    let percentChange24h: CoinValue
-    let percentChange7d: CoinValue
-    let lastUpdated: CoinValue
+    let cmcRank: Int
+    let lastUpdated: String
+    let quote: CoinQuote
     
     enum CodingKeys : String, CodingKey {
         case id = "id"
         case name = "name"
         case symbol = "symbol"
-        case rank = "rank"
-        case priceEur = "price_eur"
-        case priceUsd = "price_usd"
-        case priceBtc = "price_btc"
-        case marketCapUsd = "market_cap_usd"
-        case marketCapEur = "market_cap_eur"
-        case availableSupply = "available_supply"
-        case totalSupply = "total_supply"
+        case slug = "slug"
+        case numMarketPairs = "num_market_pairs"
+        case dateAdded = "date_added"
+        case tags = "tags"
         case maxSupply = "max_supply"
-        case change24hVolumeUsd = "24h_volume_usd"
-        case change24hVolumeEur = "24h_volume_eur"
+        case circulatingSupply = "circulating_supply"
+        case totalSupply = "total_supply"
+        case cmcRank = "cmc_rank"
+        case lastUpdated = "last_updated"
+        case quote = "quote"
+    }
+}
+
+
+struct Tag: Codable {
+    let name: String?
+}
+
+struct USD: Codable {
+    let price: Double
+    let change24hVolume: Double?
+    let percentChange1h: Double?
+    let percentChange24h: Double?
+    let percentChange7d: Double?
+    let marketCap: Double?
+    let lastUpdated: String
+    
+    enum CodingKeys : String, CodingKey {
+        case price = "price"
+        case change24hVolume = "volume_24h"
         case percentChange1h = "percent_change_1h"
         case percentChange24h = "percent_change_24h"
         case percentChange7d = "percent_change_7d"
+        case marketCap = "market_cap"
         case lastUpdated = "last_updated"
     }
 }
+
+struct CoinQuote: Codable {
+    let USD: USD
+}
+

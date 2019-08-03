@@ -28,6 +28,7 @@ public protocol API {
     var host: URL? { get }
     var endPoint: Endpoint { get }
     var method: HTTPMethod { get }
+	var headers: [String: String]? { get }
 }
 
 extension API {
@@ -37,21 +38,34 @@ extension API {
         guard let url: URL = self.url(self.endPoint) else {
             throw APIError.noEndpoint
         }
+
+		print(url.absoluteString)
         
         var request: URLRequest = URLRequest(url: url as URL)
         request.httpMethod = method.rawValue
+
+		if let headers = self.headers {
+			for (field, value) in headers {
+                
+				request.setValue(value, forHTTPHeaderField: field)
+			}
+		}
         
         let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            
+
+			if let data = data {
+				let jsonString = String(data: data, encoding: .utf8)
+				self.debugInformation(response: response, responseString: jsonString)
+			}
+
             do {
+				guard let data = data else {
+					throw APIError.noData
+				}
+
                 let decoder = JSONDecoder()
-                
-                guard let data = data else {
-                    throw APIError.noData
-                }
-                
                 let jsonData = try decoder.decode(DecodableType.self, from: data)
-                
+
                 DispatchQueue.main.async {
                     completion(.success(jsonData))
                 }
@@ -94,13 +108,15 @@ extension API {
     }
     
     func debugInformation(response: URLResponse?, responseString: String?) {
-        
-//        if let httpResponse: HTTPURLResponse = response as? HTTPURLResponse {
-//
-//            debugPrint()
-//            debugPrint("<= \(self.method) - \(self.endpoint.path) - Response: \(httpResponse.statusCode)")
-//            debugPrint("<= /\(self.endpoint.path) - Body: " + (responseString ?? ""))
-//            debugPrint()
-//        }
+
+		guard let url: URL = self.url(self.endPoint) else { return }
+
+        if let httpResponse: HTTPURLResponse = response as? HTTPURLResponse {
+
+            debugPrint()
+            debugPrint("<= \(self.method) - \(url) - Response: \(httpResponse.statusCode)")
+            //debugPrint("<= \(url) - Body: " + (responseString ?? ""))
+            debugPrint()
+        }
     }
 }

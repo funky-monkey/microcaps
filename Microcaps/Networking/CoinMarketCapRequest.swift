@@ -14,21 +14,39 @@ struct SearchQuery {
 }
 
 struct CoinMarketCapRequest: API {
+
+    private static let sandboxApiKey = "sandbox-key"
+    private static let proApiKey = "product-key"
     
-    typealias DecodableType = [Coin]
+    typealias DecodableType = CoinMeta
     
     var host: URL? {
-        return URL(string: "https://api.coinmarketcap.com/v1/")
+		if self.showDebug {
+			return URL(string: "https://sandbox-api.coinmarketcap.com/v1/")
+		} else {
+			return URL(string: "https://pro-api.coinmarketcap.com/v1/")
+		}
     }
     
     var endPoint: Endpoint {
-        return .ticker
+        return .lastestListings
     }
     
     var method: HTTPMethod {
         return .get
     }
-    
+
+	var headers: [String : String]? {
+        if self.showDebug {
+            return ["Accept" : "application/json",
+                    "X-CMC_PRO_API_KEY" : CoinMarketCapRequest.sandboxApiKey]
+        } else {
+            return ["Accept" : "application/json",
+                    "X-CMC_PRO_API_KEY" : CoinMarketCapRequest.proApiKey]
+        }
+		
+	}
+
     var showDebug: Bool {
         return false
     }

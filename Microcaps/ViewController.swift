@@ -9,13 +9,23 @@
 import Cocoa
 
 class ViewController: NSViewController {
-    
-    let datasource = MarketcapDatasource()
 
-    @IBOutlet weak var tableView: NSTableView!
+	let datasource = MarketcapDatasource()
     
+    @IBOutlet weak var tableView: NSTableView!
+	@IBOutlet weak var refreshButton: NSButton!
+
+	var appearanceChangeObservation: NSKeyValueObservation?
+
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+
+		refreshButton.focusRingType = .none
+
+		self.appearanceChangeObservation = self.view.observe(\.effectiveAppearance) { [weak self] _, _  in
+			self?.updateAppearanceRelatedChanges()
+		}
         
         self.tableView.dataSource = self
         self.tableView.delegate = self
@@ -23,8 +33,32 @@ class ViewController: NSViewController {
         
         reload()
     }
+
+	private func updateAppearanceRelatedChanges() {
+
+		switch view.effectiveAppearance.bestMatch(from: [.aqua, .darkAqua]) {
+		case .aqua?:
+			self.view.layer?.backgroundColor = NSColor.white.cgColor
+		case .darkAqua?:
+			self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
+		default:
+			self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
+		}
+	}
     
-    @IBAction func reloadData(_ sender: Any) {
+    override func viewDidAppear() {
+        if let window = self.view.window {
+            self.view.wantsLayer = true
+            self.view.layer?.backgroundColor = NSColor.textBackgroundColor.cgColor
+            
+            window.titlebarAppearsTransparent = true
+            window.titleVisibility = .hidden
+            window.styleMask.insert(.fullSizeContentView)
+        }
+    }
+    
+    @IBAction func reloadData(_ sender: NSButton) {
+
         self.reload()
     }
     
@@ -60,22 +94,28 @@ extension ViewController: NSTableViewDelegate {
         var cellIdentifier: String = ""
         
         if tableColumn == tableView.tableColumns[0] {
-            text = item.rank.string
+            text = String(describing: item.cmcRank)
             cellIdentifier = "RankId"
         } else if tableColumn == tableView.tableColumns[1] {
-            text = item.symbol.string
+            text = item.symbol
             cellIdentifier = "SymbolId"
         }else if tableColumn == tableView.tableColumns[2] {
-            text = item.name.string
+            text = item.name
             cellIdentifier = "TokenNameId"
         }else if tableColumn == tableView.tableColumns[3] {
-            text = String(describing: item.marketCapEur)
+            if let marketCap = item.quote.USD.marketCap {
+                text = String(format: "%.2f", marketCap)
+            }
             cellIdentifier = "MarketCapId"
         } else if tableColumn == tableView.tableColumns[4] {
-            text = String(describing: item.availableSupply)
-            cellIdentifier = "AvailableSupplyId"
+            if let circulatingSupply = item.circulatingSupply {
+                text = String(format: "%.2f", circulatingSupply)
+            }
+            cellIdentifier = "CirculatingSupplyId"
         } else if tableColumn == tableView.tableColumns[5] {
-            text = String(describing: item.totalSupply)
+            if let totalSupply = item.totalSupply {
+                text = String(format: "%.2f", totalSupply)
+            }
             cellIdentifier = "TotalSupplyId"
         }
         
@@ -98,8 +138,9 @@ extension ViewController: NSTableViewDelegate {
         
         let item = self.datasource.data[self.tableView.selectedRow]
         
-        let id = item.id.string
-        let url = URL(string: "https://coinmarketcap.com/currencies/" + id)!
-        NSWorkspace.shared.open(url)
+        let id = item.slug
+        if let url = URL(string: "https://coinmarketcap.com/currencies/" + id) {
+            NSWorkspace.shared.open(url)
+        }
     }
 }

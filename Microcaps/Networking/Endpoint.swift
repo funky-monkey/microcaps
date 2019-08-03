@@ -10,7 +10,8 @@ import Foundation
 
 public enum Endpoint {
     case getBase
-    case ticker
+    case lastestListings
+	case lastestMarketPairs
 }
 
 protocol Path {
@@ -24,8 +25,10 @@ extension Endpoint: Path {
         switch self {
         case .getBase:
             return "/"
-        case .ticker:
-            return "ticker/?convert=EUR&limit=0"
+        case .lastestListings:
+            return "cryptocurrency/listings/latest?limit=5000"
+		case .lastestMarketPairs:
+			return "cryptocurrency/market-pairs/latest"
         }
     }
 }
