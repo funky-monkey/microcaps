@@ -91,13 +91,13 @@ struct Tag: Codable {
 }
 
 struct USD: Codable {
-    let price: Double
+    let price: Double?
     let change24hVolume: Double?
     let percentChange1h: Double?
     let percentChange24h: Double?
     let percentChange7d: Double?
     let marketCap: Double?
-    let lastUpdated: String
+    let lastUpdated: String?
     
     enum CodingKeys : String, CodingKey {
         case price = "price"
